@@ -102,26 +102,26 @@ if (modulesGrid) {
 
   // The 20 e-Safe modules
   const MODULES = [
-    { num: 1,  name: "Introduction to Cybersecurity",  icon: "🛡️" },
-    { num: 2,  name: "Recognizing Phishing Attacks",   icon: "🎣" },
-    { num: 3,  name: "Email Security Best Practices",  icon: "📧" },
-    { num: 4,  name: "Strong Password Creation",       icon: "🔑" },
-    { num: 5,  name: "Password Managers",              icon: "🔐" },
-    { num: 6,  name: "Two-Factor Authentication",      icon: "📱" },
-    { num: 7,  name: "Social Engineering Tactics",     icon: "🎭" },
-    { num: 8,  name: "Protecting Personal Data",       icon: "📋" },
-    { num: 9,  name: "Ransomware Prevention",          icon: "💀" },
-    { num: 10, name: "Malware Detection",              icon: "🦠" },
-    { num: 11, name: "Safe Web Browsing",               icon: "🌐" },
-    { num: 12, name: "Public WiFi Security",            icon: "📡" },
-    { num: 13, name: "Mobile Device Security",          icon: "💻" },
-    { num: 14, name: "Cloud Storage Safety",            icon: "☁️" },
-    { num: 15, name: "Data Backup Strategies",          icon: "💾" },
-    { num: 16, name: "Physical Security",               icon: "🔒" },
-    { num: 17, name: "Incident Reporting",              icon: "🚨" },
-    { num: 18, name: "Privacy & Compliance",             icon: "📜" },
-    { num: 19, name: "Advanced Threats",                icon: "⚠️" },
-    { num: 20, name: "Security Culture",                icon: "🏆" },
+    { num: 1,  name: "Introduction to Cybersecurity",  icon: "fi fi-tr-shield-check" },
+    { num: 2,  name: "Recognizing Phishing Attacks",   icon: "fi fi-tr-hook" },
+    { num: 3,  name: "Email Security Best Practices",  icon: "fi fi-tr-envelope-shield" },
+    { num: 4,  name: "Strong Password Creation",       icon: "fi fi-tr-key" },
+    { num: 5,  name: "Password Managers",              icon: "fi fi-tr-padlock-check" },
+    { num: 6,  name: "Two-Factor Authentication",      icon: "fi fi-ts-user-unlock" },
+    { num: 7,  name: "Social Engineering Tactics",     icon: "fi fi-tr-user-secret" },
+    { num: 8,  name: "Protecting Personal Data",       icon: "fi fi-tr-shield-keyhole" },
+    { num: 9,  name: "Ransomware Prevention",          icon: "fi fi-tr-skull" },
+    { num: 10, name: "Malware Detection",              icon: "fi fi-tr-virus" },
+    { num: 11, name: "Safe Web Browsing",               icon: "fi fi-tr-globe-shield" },
+    { num: 12, name: "Public WiFi Security",            icon: "fi fi-tr-wifi-exclamation" },
+    { num: 13, name: "Mobile Device Security",          icon: "fi fi-tr-mobile-notch" },
+    { num: 14, name: "Cloud Storage Safety",            icon: "fi fi-tr-cloud-shield" },
+    { num: 15, name: "Data Backup Strategies",          icon: "fi fi-tr-database" },
+    { num: 16, name: "Physical Security",               icon: "fi fi-tr-lock" },
+    { num: 17, name: "Incident Reporting",              icon: "fi fi-tr-megaphone" },
+    { num: 18, name: "Privacy & Compliance",             icon: "fi fi-ts-compliance-document" },
+    { num: 19, name: "Advanced Threats",                icon: "fi fi-tr-triangle-warning" },
+    { num: 20, name: "Security Culture",                icon: "fi fi-tr-trophy-star" },
   ];
 
   // ── Load user info ──
@@ -202,7 +202,7 @@ if (modulesGrid) {
 
       card.innerHTML = `
         <div class="module-card-top">
-          <div class="module-thumb">${mod.icon}</div>
+          <div class="module-thumb"><i class="${mod.icon}"></i></div>
         </div>
         ${statusIcon}
         <div class="module-name">${mod.name}</div>
@@ -234,4 +234,137 @@ if (modulesGrid) {
   }
 
   renderDashboard();
+}
+
+
+// ═══════════════════════════════════════════════
+// MODULE CONTENT PAGE
+// ═══════════════════════════════════════════════
+const moduleTitleEl = document.getElementById('moduleTitle');
+
+if (moduleTitleEl) {
+
+  // Module content library — each module has 1+ "pages"
+  const MODULE_CONTENT = {
+    1: {
+      name: "Introduction to Cybersecurity",
+      character: { name: "James Okafor", role: "IT Director", initials: "JO" },
+      dialogue: "Welcome to e-Safe. Before we dive into specific threats, let's understand why this matters to you personally — not just to the company.",
+      scenarioTag: "Scenario",
+      scenarioTitle: "The Bigger Picture",
+      paragraphs: [
+        "Cybersecurity isn't just an IT problem — it's everyone's responsibility. A single click on the wrong link, one reused password, or one moment of carelessness can expose an entire organization.",
+        "Cissy Technologies handles sensitive client data every day. Attackers know this, and they specifically target employees — not just servers — because people are often the easiest way in."
+      ],
+      keyLesson: "Every employee is a security checkpoint. Your daily decisions directly affect whether an attack succeeds or fails.",
+      actionHeading: "What you should remember:",
+      actionSteps: [
+        "Security is a shared responsibility, not just IT's job",
+        "Attackers target people because it's often easier than breaking technical defences",
+        "Small daily habits make the biggest difference"
+      ]
+    },
+    7: {
+      name: "Social Engineering Tactics",
+      character: { name: "Sarah Martinez", role: "Finance Manager", initials: "SM" },
+      dialogue: "Hi, this is Tom from IT Support. We've detected unusual activity on your account and need to verify your identity. Can you confirm your employee ID and the last 4 digits of your phone number?",
+      scenarioTag: "Scenario",
+      scenarioTitle: "The Phone Call",
+      paragraphs: [
+        "Sarah receives a call from someone claiming to be from the IT department. The caller sounds professional and knows her name, department, and even mentions a recent company-wide email about security updates.",
+        "The caller explains that they need to \"verify her identity\" before they can fix the security issue on her account. They ask for her employee ID and personal information.",
+        "Sarah feels uncertain. The caller seems legitimate, but something feels off about being asked for personal information over the phone..."
+      ],
+      keyLesson: "Legitimate IT support will never ask you to verify your identity by providing sensitive information over the phone. Always verify the caller's identity through official channels before sharing any information.",
+      actionHeading: "What Sarah should do:",
+      actionSteps: [
+        "Politely end the call and don't provide any information",
+        "Contact IT support directly using the official company directory",
+        "Report the suspicious call to the security team"
+      ]
+    }
+  };
+
+  // Generic fallback content generator for modules without custom content yet
+  function getGenericContent(modNum, modName) {
+    return {
+      name: modName,
+      character: { name: "Alex Chen", role: "Operations Lead", initials: "AC" },
+      dialogue: `Let's walk through a real situation involving ${modName.toLowerCase()}.`,
+      scenarioTag: "Scenario",
+      scenarioTitle: "A Closer Look",
+      paragraphs: [
+        `This module covers ${modName.toLowerCase()} — a topic that affects everyone at Cissy Technologies, regardless of role or department.`,
+        "Understanding the risks and the right response is the first step toward building a safer workplace for everyone."
+      ],
+      keyLesson: `Stay alert and follow Cissy Technologies' official procedures whenever ${modName.toLowerCase()} is involved.`,
+      actionHeading: "What you should do:",
+      actionSteps: [
+        "Pause before acting on anything unexpected or urgent",
+        "Verify through official channels when in doubt",
+        "Report anything suspicious to the security team"
+      ]
+    };
+  }
+
+  const MODULE_NAMES = {
+    1: "Introduction to Cybersecurity", 2: "Recognizing Phishing Attacks", 3: "Email Security Best Practices",
+    4: "Strong Password Creation", 5: "Password Managers", 6: "Two-Factor Authentication",
+    7: "Social Engineering Tactics", 8: "Protecting Personal Data", 9: "Ransomware Prevention",
+    10: "Malware Detection", 11: "Safe Web Browsing", 12: "Public WiFi Security",
+    13: "Mobile Device Security", 14: "Cloud Storage Safety", 15: "Data Backup Strategies",
+    16: "Physical Security", 17: "Incident Reporting", 18: "Privacy & Compliance",
+    19: "Advanced Threats", 20: "Security Culture"
+  };
+
+  // Get module ID from URL, e.g. module.html?id=7
+  const urlParams = new URLSearchParams(window.location.search);
+  const modId = parseInt(urlParams.get('id')) || 1;
+  const modName = MODULE_NAMES[modId] || `Module ${modId}`;
+  const content = MODULE_CONTENT[modId] || getGenericContent(modId, modName);
+
+  // Populate the page
+  document.getElementById('moduleTitle').textContent = content.name;
+  document.getElementById('moduleBadge').textContent = `Module ${modId} of 20`;
+  document.getElementById('charAvatar').textContent = content.character.initials;
+  document.getElementById('charName').textContent = content.character.name;
+  document.getElementById('charRole').textContent = content.character.role;
+  document.getElementById('dialogueText').textContent = `"${content.dialogue}"`;
+  document.getElementById('scenarioTitle').textContent = content.scenarioTitle;
+  document.getElementById('keyLessonText').textContent = content.keyLesson;
+  document.getElementById('actionStepsHeading').textContent = content.actionHeading;
+
+  // Render scenario paragraphs
+  const scenarioBody = document.getElementById('scenarioBody');
+  scenarioBody.innerHTML = content.paragraphs.map(p => `<p>${p}</p>`).join('');
+
+  // Render action steps
+  const actionList = document.getElementById('actionStepsList');
+  actionList.innerHTML = content.actionSteps.map((step, i) => `
+    <li>
+      <span class="step-num-box">${i + 1}</span>
+      <span>${step}</span>
+    </li>
+  `).join('');
+
+  // Set module progress bar (single page module for now — 100% on load)
+  document.getElementById('modProgressPct').textContent = '100%';
+  document.getElementById('modProgressFill').style.width = '100%';
+
+  // User avatar in navbar
+  const moduleUserRaw = localStorage.getItem('esafe_user');
+  const moduleUser = moduleUserRaw ? JSON.parse(moduleUserRaw) : { fullName: "Guest" };
+  const modInitials = moduleUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  const modAvatarEl = document.getElementById('userAvatar');
+  if (modAvatarEl) modAvatarEl.textContent = modInitials || 'U';
+
+  // Continue button — marks module complete and returns to dashboard
+  document.getElementById('moduleContinueBtn').addEventListener('click', () => {
+    let completedModules = JSON.parse(localStorage.getItem('esafe_completed_modules') || '[]');
+    if (!completedModules.includes(modId)) {
+      completedModules.push(modId);
+      localStorage.setItem('esafe_completed_modules', JSON.stringify(completedModules));
+    }
+    window.location.href = 'dashboard.html';
+  });
 }
