@@ -922,3 +922,99 @@ if (startQuizBtn) {
   document.getElementById('submitAnswerBtn').addEventListener('click', submitAnswer);
   document.getElementById('nextQuestionBtn').addEventListener('click', nextQuestion);
 }
+
+
+// ═══════════════════════════════════════════════
+// RESULTS PAGE
+// ═══════════════════════════════════════════════
+const resultsHero = document.getElementById('resultsHero');
+
+if (resultsHero) {
+
+  // User avatar
+  const resUserRaw = localStorage.getItem('esafe_user');
+  const resUser = resUserRaw ? JSON.parse(resUserRaw) : { fullName: 'Guest' };
+  const resInitials = resUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  const resAvatarEl = document.getElementById('userAvatar');
+  if (resAvatarEl) resAvatarEl.textContent = resInitials || 'U';
+
+  // Load score + results
+  const score = parseInt(localStorage.getItem('esafe_quiz_score') || '0');
+  const results = JSON.parse(localStorage.getItem('esafe_quiz_results') || '[]');
+  const pct = Math.round((score / 50) * 100);
+  const passed = pct >= 70;
+
+  // Hero state
+  resultsHero.classList.add(passed ? 'pass' : 'fail');
+  document.getElementById('resultsIcon').className = passed ? 'fi fi-tr-trophy-star' : 'fi fi-tr-face-disappointed';
+  document.getElementById('resultsHeadline').textContent = passed ? 'You passed!' : 'Almost there!';
+  document.getElementById('resultsScore').textContent = pct + '%';
+  document.getElementById('resultsScoreSub').textContent = `${score} of 50 correct`;
+
+  // Theme breakdown
+  const themes = [
+    { name: 'Social Threats',       modules: [2,3,7] },
+    { name: 'Credentials & Access', modules: [4,5,6] },
+    { name: 'Malware & Attacks',    modules: [9,10,19] },
+    { name: 'Safe Habits & Devices',modules: [11,12,13,15,16] },
+    { name: 'Data & Compliance',    modules: [1,8,14,17,18,20] },
+  ];
+
+  const breakdownEl = document.getElementById('themeBreakdown');
+  const weakThemes = [];
+
+  themes.forEach(theme => {
+    const themeQs = results.filter(r => theme.modules.includes(r.question.module));
+    if (themeQs.length === 0) return;
+    const correct = themeQs.filter(r => r.correct).length;
+    const themePct = Math.round((correct / themeQs.length) * 100);
+    const cls = themePct >= 70 ? 'good' : themePct >= 50 ? 'warn' : 'bad';
+
+    if (themePct < 70) weakThemes.push({ name: theme.name, pct: themePct, modules: theme.modules });
+
+    breakdownEl.innerHTML += `
+      <div class="theme-row">
+        <div class="theme-row-top">
+          <span>${theme.name}</span>
+          <span class="theme-pct ${cls}">${themePct}%</span>
+        </div>
+        <div class="theme-track">
+          <div class="theme-fill ${cls}" style="width:${themePct}%"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  // Weak topics (fail state)
+  if (!passed && weakThemes.length > 0) {
+    document.getElementById('weakTopicsCard').style.display = 'block';
+    document.getElementById('resultsEncouragement').style.display = 'block';
+    const weakList = document.getElementById('weakTopicsList');
+    weakThemes.forEach(t => {
+      weakList.innerHTML += `
+        <div class="weak-topic-row">
+          <span class="weak-topic-name">${t.name}</span>
+          <span class="weak-topic-score">${t.pct}%</span>
+          <a class="weak-topic-link" href="dashboard.html">Review modules</a>
+        </div>
+      `;
+    });
+  }
+
+  // Action buttons
+  const actionsEl = document.getElementById('resultsActions');
+  if (passed) {
+    // Save pass status so certificate page can confirm
+    localStorage.setItem('esafe_quiz_passed', 'true');
+    actionsEl.innerHTML = `
+      <a href="certificate.html" class="btn-primary">Get my certificate</a>
+      <a href="dashboard.html" class="btn-outline">Back to dashboard</a>
+    `;
+  } else {
+    localStorage.setItem('esafe_quiz_passed', 'false');
+    actionsEl.innerHTML = `
+      <a href="dashboard.html" class="btn-outline">Review modules</a>
+      <a href="quiz.html" class="btn-primary">Retake quiz</a>
+    `;
+  }
+}
