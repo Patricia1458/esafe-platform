@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════
-   e-Safe Platform — style.css
+   e-Safe Platform — 
    Cissy Technologies
    
 ═══════════════════════════════════════════════ */
@@ -1242,5 +1242,171 @@ select.input-field {
 .results-encouragement {
   text-align: center; font-size: 13px;
   color: var(--text-3); line-height: 1.6;
+}
+
+
+/* ═══════════════════════════════════════════════
+   CERTIFICATE PAGE
+═══════════════════════════════════════════════ */
+.cert-page-body { background: var(--gray-bg); }
+.cert-page-main { padding: 2.5rem 0 5rem; }
+.cert-page-container { max-width: 760px; margin: 0 auto; padding: 0 2rem; }
+
+.cert-page-header {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 2rem;
+}
+.cert-page-header-icon {
+  width: 48px; height: 48px;
+  background: var(--navy); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 20px; flex-shrink: 0;
+}
+.cert-page-title { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.cert-page-sub { font-size: 14px; color: var(--text-2); }
+
+/* Certificate document */
+.cert-wrapper {
+  background: white;
+  border: 1px solid var(--gray-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.cert-doc {
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+  padding: 3rem 3.5rem;
+  background: #FAFBFF;
+  position: relative;
+  text-align: center;
+}
+
+.cert-inner-border {
+  border: 1px solid rgba(26,39,68,0.15);
+  border-radius: 4px;
+  padding: 2.5rem;
+}
+
+.cert-org {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  color: var(--text-3);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.cert-logo-wrap {
+  margin: 0 auto 1.25rem;
+  width: 52px; height: 52px;
+  border: 1.5px solid var(--gray-border);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: white;
+}
+
+.cert-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 1.5rem;
+  letter-spacing: .01em;
+}
+
+.cert-presented {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-bottom: 12px;
+}
+
+.cert-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 34px;
+  font-style: italic;
+  color: var(--navy);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.cert-name-underline {
+  width: 180px;
+  height: 1.5px;
+  background: var(--navy);
+  margin: 0 auto 1.5rem;
+  opacity: .3;
+}
+
+.cert-course-label {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-bottom: 8px;
+}
+
+.cert-course-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 2.5rem;
+  line-height: 1.3;
+}
+
+.cert-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: .5rem;
+}
+
+.cert-meta-item { flex: 1; }
+
+.cert-meta-line {
+  width: 80px;
+  height: 1px;
+  background: var(--navy);
+  opacity: .3;
+  margin-bottom: 6px;
+}
+
+.cert-meta-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+
+.cert-meta-sub {
+  font-size: 11px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.cert-seal { flex-shrink: 0; opacity: .7; }
+
+/* Action buttons */
+.cert-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cert-actions .btn-primary,
+.cert-actions .btn-outline,
+.cert-actions .btn-ghost {
+  flex: 1;
+  justify-content: center;
+  padding: 13px;
+  gap: 8px;
+  min-width: 140px;
+}
+
+@media print {
+  .navbar, .cert-page-header, .cert-actions { display: none !important; }
+  .cert-page-body { background: white; }
+  .cert-wrapper { border: none; box-shadow: none; padding: 0; }
+  .cert-page-main { padding: 0; }
 }
 
