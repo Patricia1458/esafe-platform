@@ -1,4 +1,4 @@
-// e-Safe Platform — main.js
+// e-Safe Platform —
 // Cissy Technologies
 
 // ── Mobile nav toggle ──
@@ -1017,4 +1017,147 @@ if (resultsHero) {
       <a href="quiz.html" class="btn-primary">Retake quiz</a>
     `;
   }
+}
+
+
+// ═══════════════════════════════════════════════
+// CERTIFICATE PAGE
+// ═══════════════════════════════════════════════
+const certDoc = document.getElementById('certDoc');
+
+if (certDoc) {
+
+  // Load user data
+  const certUserRaw = localStorage.getItem('esafe_user');
+  const certUser = certUserRaw ? JSON.parse(certUserRaw) : { fullName: 'Valued Employee' };
+
+  // Set name + date
+  document.getElementById('certName').textContent = certUser.fullName;
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  document.getElementById('certDate').textContent = dateStr;
+
+  // User avatar
+  const certInitials = certUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  const certAvatarEl = document.getElementById('userAvatar');
+  if (certAvatarEl) certAvatarEl.textContent = certInitials || 'U';
+
+  // ── PRINT ──
+  document.getElementById('printCertBtn').addEventListener('click', () => {
+    window.print();
+  });
+
+  // ── DOWNLOAD PDF ──
+  document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+    const W = 297; // A4 landscape width
+    const H = 210; // A4 landscape height
+    const name = certUser.fullName;
+
+    // Background
+    doc.setFillColor(250, 251, 255);
+    doc.rect(0, 0, W, H, 'F');
+
+    // Outer border
+    doc.setDrawColor(26, 39, 68);
+    doc.setLineWidth(0.8);
+    doc.rect(10, 10, W - 20, H - 20, 'S');
+
+    // Inner border
+    doc.setLineWidth(0.3);
+    doc.setDrawColor(26, 39, 68, 0.2);
+    doc.rect(15, 15, W - 30, H - 30, 'S');
+
+    // Organisation name
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.setCharSpace(3);
+    doc.text('CISSY TECHNOLOGIES', W / 2, 32, { align: 'center' });
+    doc.setCharSpace(0);
+
+    // Certificate title
+    doc.setFont('times', 'bold');
+    doc.setFontSize(26);
+    doc.setTextColor(26, 39, 68);
+    doc.text('Certificate of Completion', W / 2, 55, { align: 'center' });
+
+    // Divider
+    doc.setDrawColor(26, 39, 68);
+    doc.setLineWidth(0.3);
+    doc.line(W / 2 - 60, 60, W / 2 + 60, 60);
+
+    // "This certifies that"
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text('This certifies that', W / 2, 74, { align: 'center' });
+
+    // Recipient name
+    doc.setFont('times', 'italic');
+    doc.setFontSize(30);
+    doc.setTextColor(26, 39, 68);
+    doc.text(name, W / 2, 92, { align: 'center' });
+
+    // Name underline
+    const nameWidth = doc.getTextWidth(name);
+    doc.setDrawColor(26, 39, 68);
+    doc.setLineWidth(0.4);
+    doc.line(W / 2 - nameWidth / 2, 95, W / 2 + nameWidth / 2, 95);
+
+    // "has successfully completed"
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text('has successfully completed', W / 2, 108, { align: 'center' });
+
+    // Course name
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(26, 39, 68);
+    doc.text('e-Safe Cybersecurity Awareness Training', W / 2, 120, { align: 'center' });
+
+    // Bottom signature lines
+    doc.setDrawColor(26, 39, 68);
+    doc.setLineWidth(0.3);
+    // Left line
+    doc.line(55, 158, 115, 158);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(26, 39, 68);
+    doc.text('Cissy Technologies', 85, 163, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('ISSUING ORGANISATION', 85, 168, { align: 'center' });
+
+    // Right line — date
+    doc.setDrawColor(26, 39, 68);
+    doc.line(182, 158, 242, 158);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(26, 39, 68);
+    doc.text(dateStr, 212, 163, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('DATE ISSUED', 212, 168, { align: 'center' });
+
+    // Center seal circle
+    doc.setDrawColor(26, 39, 68);
+    doc.setLineWidth(0.4);
+    doc.circle(W / 2, 158, 14, 'S');
+    doc.setLineWidth(0.2);
+    doc.circle(W / 2, 158, 11, 'S');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(26, 39, 68);
+    doc.text('e-SAFE', W / 2, 159, { align: 'center' });
+
+    // Save
+    const safeName = name.replace(/[^a-zA-Z0-9]/g, '_');
+    doc.save(`eSafe_Certificate_${safeName}.pdf`);
+  });
 }
