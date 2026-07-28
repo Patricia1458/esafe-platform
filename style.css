@@ -1432,3 +1432,12 @@ select.input-field {
   padding: 16px; font-size: 13px; line-height: 1.75;
   color: var(--text); white-space: pre-wrap; font-family: inherit;
 }
+
+/* Module card description line */
+.module-desc {
+  font-size: 11px; color: var(--text-3);
+  line-height: 1.4; margin-bottom: 8px;
+}
+/* 5-module grid — bigger cards */
+.modules-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.module-thumb i { font-size: 28px; }
