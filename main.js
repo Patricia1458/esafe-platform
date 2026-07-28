@@ -18,10 +18,7 @@ document.querySelectorAll('.nav-link, .nav-signin, .nav-cta').forEach(link => {
   });
 });
 
-
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // SECURITY UTILITIES
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 
 function sanitise(str) {
   if (typeof str !== "string") return "";
@@ -144,77 +141,75 @@ const modulesGrid = document.getElementById('modulesGrid');
 
 if (modulesGrid) {
 
-  // The 20 e-Safe modules
-  const MODULES = [
-    { num: 1, name: "Social Threats",        icon: "fi fi-tr-shield-exclamation" },
-    { num: 2, name: "Credentials & Access",  icon: "fi fi-tr-lock" },
-    { num: 3, name: "Malware & Attacks",     icon: "fi fi-tr-virus" },
-    { num: 4, name: "Safe Habits & Devices", icon: "fi fi-tr-globe-shield" },
-    { num: 5, name: "Data & Compliance",     icon: "fi fi-ts-compliance-document" },
+  const DASH_MODULES = [
+    { num: 1, name: "Social Threats",        icon: "fi fi-tr-shield-exclamation",  desc: "Phishing, social engineering, vishing & smishing" },
+    { num: 2, name: "Credentials & Access",  icon: "fi fi-tr-lock",                desc: "Passwords, password managers & two-factor authentication" },
+    { num: 3, name: "Malware & Attacks",     icon: "fi fi-tr-virus",               desc: "Ransomware, trojans, USB risks & man-in-the-middle" },
+    { num: 4, name: "Safe Habits & Devices", icon: "fi fi-tr-globe-shield",        desc: "Safe browsing, public WiFi, device security & updates" },
+    { num: 5, name: "Data & Compliance",     icon: "fi fi-ts-compliance-document", desc: "Data privacy, cloud storage, incident reporting & compliance" },
   ];
 
-  // ── Load user info ──
-  const userDataRaw = localStorage.getItem('esafe_user');
-  const userData = userDataRaw ? JSON.parse(userDataRaw) : { fullName: "Guest" };
+  // Load user
+  const userData = safeGet('esafe_user') || { fullName: 'Learner' };
   const firstName = userData.fullName.split(' ')[0];
-
   document.getElementById('welcomeTitle').textContent = `Welcome back, ${firstName}!`;
-
-  const initials = userData.fullName
-    .split(' ')
-    .map(n => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
+  const initials = userData.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   const avatarEl = document.getElementById('userAvatar');
   if (avatarEl) avatarEl.textContent = initials || 'U';
 
-  // ── Load progress (which modules are completed) ──
-  // Stored as an array of completed module numbers, e.g. [1,2,3]
-  // First-time visitors get a demo state matching the wireframe (6 done)
+  // Seed empty progress on first visit
   if (localStorage.getItem('esafe_completed_modules') === null) {
-    localStorage.setItem('esafe_completed_modules', JSON.stringify([]));
+    safeSet('esafe_completed_modules', []);
   }
-  let completed = JSON.parse(localStorage.getItem('esafe_completed_modules') || '[]');
-
-  // Determine the "active" module — first one not yet completed
-  let activeModuleNum = MODULES.find(m => !completed.includes(m.num))?.num || null;
 
   function renderDashboard() {
-    completed = JSON.parse(localStorage.getItem('esafe_completed_modules') || '[]');
-    activeModuleNum = MODULES.find(m => !completed.includes(m.num))?.num || null;
-
+    const completed = safeGet('esafe_completed_modules') || [];
     const completedCount = completed.length;
-    const remainingCount = 20 - completedCount;
-    const pct = Math.round((completedCount / 20) * 100);
-    const timeRemaining = (remainingCount * 20 / 60).toFixed(1); // ~20 min per module
+    const remainingCount = 5 - completedCount;
+    const pct = Math.round((completedCount / 5) * 100);
+    const allDone = completedCount === 5;
+    const quizPassed = localStorage.getItem('esafe_quiz_passed') === 'true';
 
-    // Update progress bar + stats
+    // Progress bar
     document.getElementById('progressPct').textContent = pct + '%';
     document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('modulesCompletedBadge').textContent = `${completedCount} of 20 modules completed`;
+    document.getElementById('welcomeBadge').textContent = `${completedCount} of 5 modules completed`;
     document.getElementById('statCompleted').textContent = completedCount;
     document.getElementById('statRemaining').textContent = remainingCount;
-    document.getElementById('statTime').textContent = remainingCount === 0 ? '0h' : `~${timeRemaining}h`;
+    document.getElementById('statTime').textContent = remainingCount === 0 ? '0h' : `~${(remainingCount * 0.5).toFixed(1)}h`;
 
-    // Certificate banner state
+    // Certificate / quiz banner
     const certBanner = document.getElementById('certBanner');
     const certTitle = document.getElementById('certBannerTitle');
     const certSub = document.getElementById('certBannerSub');
-    const certIcon = document.getElementById('certBannerIcon');
+    const certAction = document.getElementById('certBannerAction');
+    const certIconEl = document.getElementById('certBannerIconEl');
 
-    if (completedCount === 20) {
+    if (quizPassed) {
       certBanner.classList.add('unlocked');
       certTitle.textContent = 'Certificate Unlocked!';
-      certSub.textContent = 'All modules complete — take the final quiz to claim it';
-      certIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A878" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      certSub.textContent = 'Congratulations — download your official certificate';
+      certIconEl.className = 'fi fi-tr-check-circle';
+      certIconEl.style.color = '#1D9E75';
+      certAction.innerHTML = '<a href="certificate.html" class="btn-primary" style="padding:10px 20px">Get certificate</a>';
+    } else if (allDone) {
+      certBanner.style.background = '#E6F4FF';
+      certTitle.textContent = 'All modules complete — take the final quiz!';
+      certSub.textContent = 'Pass 50 questions at 70% to earn your certificate';
+      certIconEl.className = 'fi fi-tr-document-signed';
+      certAction.innerHTML = '<a href="quiz.html" class="btn-primary" style="padding:10px 20px">Start final quiz</a>';
+    } else {
+      certTitle.textContent = 'Certificate Locked';
+      certSub.textContent = 'Complete all 5 modules and pass the final quiz to unlock';
     }
 
-    // Build module grid
+    // Module grid
     modulesGrid.innerHTML = '';
-    MODULES.forEach(mod => {
+    DASH_MODULES.forEach(mod => {
       const isDone = completed.includes(mod.num);
-      const isActive = mod.num === activeModuleNum;
+      // Active = first uncompleted module
+      const nextNum = DASH_MODULES.find(m => !completed.includes(m.num))?.num;
+      const isActive = mod.num === nextNum;
       const isLocked = !isDone && !isActive;
 
       const card = document.createElement('div');
@@ -224,17 +219,16 @@ if (modulesGrid) {
       if (isDone) {
         statusIcon = `<div class="module-status-icon done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
       } else if (isActive) {
-        statusIcon = `<div class="module-status-icon active"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1A2744"><path d="M8 5v14l11-7z"/></svg></div>`;
+        statusIcon = `<div class="module-status-icon active"><i class="fi fi-tr-play" style="font-size:13px;color:var(--navy)"></i></div>`;
       } else {
-        statusIcon = `<div class="module-status-icon locked"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>`;
+        statusIcon = `<div class="module-status-icon locked"><i class="fi fi-tr-lock" style="font-size:13px;color:#9CA3AF"></i></div>`;
       }
 
       card.innerHTML = `
-        <div class="module-card-top">
-          <div class="module-thumb"><i class="${mod.icon}"></i></div>
-        </div>
+        <div class="module-thumb"><i class="${mod.icon}"></i></div>
         ${statusIcon}
         <div class="module-name">${mod.name}</div>
+        <div class="module-desc">${mod.desc}</div>
         <span class="module-tag">Module ${mod.num}</span>
       `;
 
@@ -247,23 +241,37 @@ if (modulesGrid) {
       modulesGrid.appendChild(card);
     });
 
-    // Continue banner
-    const continueBanner = document.getElementById('continueBanner');
+    // Continue / final quiz sticky banner
+    const banner = document.getElementById('continueBanner');
+    const continueTitle = document.getElementById('continueTitle');
     const continueSub = document.getElementById('continueSub');
     const continueBtn = document.getElementById('continueBtn');
 
-    if (activeModuleNum) {
-      const activeMod = MODULES.find(m => m.num === activeModuleNum);
-      continueSub.textContent = `Resume Module ${activeMod.num}: ${activeMod.name}`;
-      continueBtn.href = `module.html?id=${activeMod.num}`;
-      continueBanner.style.display = 'flex';
+    if (allDone && !quizPassed) {
+      continueTitle.textContent = 'All modules complete!';
+      continueSub.textContent = 'Take the final quiz to earn your certificate';
+      continueBtn.textContent = 'Start final quiz';
+      continueBtn.href = 'quiz.html';
+      banner.style.display = 'flex';
+    } else if (quizPassed) {
+      banner.style.display = 'none';
     } else {
-      continueBanner.style.display = 'none';
+      const next = DASH_MODULES.find(m => !completed.includes(m.num));
+      if (next) {
+        continueTitle.textContent = 'Ready to continue?';
+        continueSub.textContent = `${isDoneAny(completed) ? 'Resume' : 'Start'} Module ${next.num}: ${next.name}`;
+        continueBtn.textContent = 'Continue';
+        continueBtn.href = `module.html?id=${next.num}`;
+        banner.style.display = 'flex';
+      }
     }
   }
 
+  function isDoneAny(completed) { return completed.length > 0; }
+
   renderDashboard();
 }
+
 
 
 // ═══════════════════════════════════════════════
