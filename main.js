@@ -124,19 +124,19 @@ if (typeof auth !== 'undefined') {
     if (!isProtectedPage()) return;
 
     try {
-      const snap = await db.collection('employees').doc(user.uid).get();
-      if (!snap.exists) {
-        // No Firestore profile for this account — the registration write
-        // must have failed partway. Send them back to create one properly
-        // rather than rendering a page with no data.
+      const snap = await db.ref('users/' + user.uid).once('value');
+      if (!snap.exists()) {
+        // No Realtime Database profile for this account — the registration
+        // write must have failed partway. Send them back to create one
+        // properly rather than rendering a page with no data.
         await auth.signOut();
         window.location.replace('register.html');
         return;
       }
 
-      const employee = { uid: user.uid, ...snap.data() };
+      const employee = { uid: user.uid, ...snap.val() };
 
-      if (document.body.classList.contains('cert-page-body') && !employee.finalQuizPassed) {
+      if (document.body.classList.contains('cert-page-body') && !employee.quizPassed) {
         window.location.replace('dashboard.html');
         return;
       }
@@ -193,7 +193,7 @@ function addAdminNavLink(employee) {
 
 // ══════════════════════════════════════════════
 // REGISTER FORM — creates the Firebase Auth account
-// and the matching Firestore employee document.
+// and the matching Realtime Database user record.
 // Firebase Auth itself guarantees emails are unique per project, so a
 // duplicate signup always surfaces as auth/email-already-in-use — we
 // send that case straight to signin.html rather than showing an inline
@@ -244,14 +244,14 @@ if (registerForm) {
 
     try {
       const cred = await auth.createUserWithEmailAndPassword(workEmail.value.trim(), password.value);
-      await db.collection('employees').doc(cred.user.uid).set({
+      await db.ref('users/' + cred.user.uid).set({
         fullName: sanitise(fullName.value),
         email: sanitise(workEmail.value.trim()),
         department: sanitise(department.value) || 'Not specified',
         registeredAt: new Date().toISOString(),
         completedModules: [],
-        finalQuizScore: null,
-        finalQuizPassed: false,
+        quizScore: null,
+        quizPassed: false,
         certificateIssued: false
       });
 
@@ -367,7 +367,7 @@ function initDashboard(employee) {
     const remainingCount = 10 - completedCount;
     const pct = Math.round((completedCount / 10) * 100);
     const allDone = completedCount === 10;
-    const quizPassed = !!employee.finalQuizPassed;
+    const quizPassed = !!employee.quizPassed;
 
     // Progress bar
     document.getElementById('progressPct').textContent = pct + '%';
@@ -735,11 +735,11 @@ function initFinalQuiz(employee) {
     // automatically at the end of the browser session.
     sessionStorage.setItem('esafe_final_quiz_results', JSON.stringify(results));
 
-    db.collection('employees').doc(employee.uid).set({
-      finalQuizScore: pct,
-      finalQuizPassed: passed,
+    db.ref('users/' + employee.uid).update({
+      quizScore: pct,
+      quizPassed: passed,
       certificateIssued: passed || employee.certificateIssued === true
-    }, { merge: true }).catch(err => {
+    }).catch(err => {
       console.error('Failed to save final quiz result:', err);
     }).finally(() => {
       window.location.href = 'results.html';
@@ -766,11 +766,11 @@ function initResultsPage(employee) {
 
   const score = hasFreshResults
     ? sessionResults.filter(r => r.correct).length
-    : Math.round(employee.finalQuizScore || 0); // 100 Qs, 1% per question — exact inverse of the stored percentage
+    : Math.round(employee.quizScore || 0); // 100 Qs, 1% per question — exact inverse of the stored percentage
   const pct = hasFreshResults
     ? Math.round((score / TOTAL) * 100)
-    : (employee.finalQuizScore || 0);
-  const passed = hasFreshResults ? pct >= 70 : !!employee.finalQuizPassed;
+    : (employee.quizScore || 0);
+  const passed = hasFreshResults ? pct >= 70 : !!employee.quizPassed;
 
   resultsHero.classList.add(passed ? 'pass' : 'fail');
   document.getElementById('resultsIcon').className = passed ? 'fi fi-tr-trophy-star' : 'fi fi-tr-face-disappointed';
@@ -974,12 +974,12 @@ function initProfilePage(employee) {
   document.getElementById('profileModulesCompleted').textContent = `${completed.length}/10`;
 
   const scoreEl = document.getElementById('profileQuizScore');
-  scoreEl.textContent = (typeof employee.finalQuizScore === 'number') ? `${employee.finalQuizScore}%` : 'Not yet taken';
+  scoreEl.textContent = (typeof employee.quizScore === 'number') ? `${employee.quizScore}%` : 'Not yet taken';
 
   const certStatusEl = document.getElementById('profileCertStatus');
   const certActionEl = document.getElementById('profileCertAction');
 
-  if (employee.finalQuizPassed) {
+  if (employee.quizPassed) {
     certStatusEl.innerHTML = '<i class="fi fi-tr-check-circle" style="font-size:20px;color:#1D9E75"></i>';
     certActionEl.innerHTML = '<a href="certificate.html" class="btn-primary" style="margin-top:1rem"><i class="fi fi-tr-download"></i> Download Certificate</a>';
   } else {
@@ -1015,15 +1015,15 @@ async function initAdminPage() {
   let rows = [];
 
   try {
-    const snap = await db.collection('employees').get();
-    snap.forEach(doc => rows.push(doc.data()));
+    const snap = await db.ref('users').once('value');
+    snap.forEach(childSnap => { rows.push(childSnap.val()); });
 
     const total = rows.length;
     const completedAll = rows.filter(r => (r.completedModules || []).length >= 10).length;
     const certsIssued = rows.filter(r => r.certificateIssued === true).length;
-    const scored = rows.filter(r => typeof r.finalQuizScore === 'number');
+    const scored = rows.filter(r => typeof r.quizScore === 'number');
     const avgScore = scored.length
-      ? Math.round(scored.reduce((sum, r) => sum + r.finalQuizScore, 0) / scored.length)
+      ? Math.round(scored.reduce((sum, r) => sum + r.quizScore, 0) / scored.length)
       : 0;
 
     document.getElementById('adminStatTotal').textContent = total;
@@ -1039,7 +1039,7 @@ async function initAdminPage() {
         const completionBadge = completedCount >= 10
           ? '<span class="admin-badge good">All 10 complete</span>'
           : `<span class="admin-badge pending">${completedCount} of 10</span>`;
-        const scoreText = typeof r.finalQuizScore === 'number' ? `${r.finalQuizScore}%` : 'Not taken';
+        const scoreText = typeof r.quizScore === 'number' ? `${r.quizScore}%` : 'Not taken';
         const certBadge = r.certificateIssued
           ? '<span class="admin-badge good">Issued</span>'
           : '<span class="admin-badge none">Pending</span>';
@@ -1060,7 +1060,7 @@ async function initAdminPage() {
     }
   } catch (err) {
     console.error('Failed to load employee list:', err);
-    tbody.innerHTML = `<tr><td colspan="7" style="color:#DC2626">Failed to load employee data. Check the Firestore security rules and the browser console for details.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="color:#DC2626">Failed to load employee data. Check the Realtime Database security rules and the browser console for details.</td></tr>`;
   }
 
   const exportBtn = document.getElementById('exportCsvBtn');
@@ -1088,7 +1088,7 @@ function exportAdminCSV(rows) {
 
   rows.forEach(r => {
     const completed = `${(r.completedModules || []).length} of 10`;
-    const score = typeof r.finalQuizScore === 'number' ? `${r.finalQuizScore}%` : 'Not taken';
+    const score = typeof r.quizScore === 'number' ? `${r.quizScore}%` : 'Not taken';
     const cert = r.certificateIssued ? 'Issued' : 'Pending';
     const dateReg = formatAdminDate(r.registeredAt);
     const fields = [r.fullName || '', r.email || '', r.department || '', completed, score, cert, dateReg];
@@ -1100,7 +1100,7 @@ function exportAdminCSV(rows) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `esafe_employees_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = `esafe_users_${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -1694,7 +1694,7 @@ function initModulePage(employee) {
           if (!completed.includes(mId)) {
             completed.push(mId);
             employee.completedModules = completed;
-            db.collection('employees').doc(employee.uid).set({ completedModules: completed }, { merge: true })
+            db.ref('users/' + employee.uid).update({ completedModules: completed })
               .catch(err => console.error('Failed to save module progress:', err));
           }
 
