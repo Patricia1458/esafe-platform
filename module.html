@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn-uicons.flaticon.com https://www.gstatic.com https://cdn.firebase.com; style-src 'self' https://fonts.googleapis.com https://cdn-uicons.flaticon.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn-uicons.flaticon.com; img-src 'self' data:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseio.com wss://*.firebaseio.com https://esafe-cissy-default-rtdb.firebaseio.com https://www.googleapis.com https://www.gstatic.com;">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module — e-Safe | Cissy Technologies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-thin-rounded/css/uicons-thin-rounded.css">
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-thin-straight/css/uicons-thin-straight.css">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="module-body">
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark">
+          <svg width="18" height="18" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L4 7V14C4 19.5 8.4 24.7 14 26C19.6 24.7 24 19.5 24 14V7L14 2Z" stroke="#1A2744" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M10 14L13 17L18 11" stroke="#1A2744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#1A2744;line-height:1.1">e-Safe</div>
+          <div style="font-size:11px;color:#9CA3AF;line-height:1">by Cissy Technologies</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="dashboard.html" class="nav-link">My Progress</a>
+        <a href="resources.html" class="nav-link">Resources</a>
+        <a href="profile.html" class="nav-link">My Profile</a>
+        <a href="#" class="nav-link" id="signOutBtn">Sign out</a>
+        <div class="user-avatar" id="userAvatar">JS</div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="module-main">
+    <div class="module-container">
+
+      <!-- HEADER CARD -->
+      <div class="dash-card module-header-card">
+        <a href="dashboard.html" class="back-arrow"><i class="fi fi-tr-arrow-left"></i></a>
+        <div class="module-header-top">
+          <div>
+            <div class="module-part-label" id="partLabel">Part 1 of 2 — Learning</div>
+            <h1 class="module-title" id="moduleTitle">Loading...</h1>
+          </div>
+          <span class="module-badge" id="moduleBadge">Module 1 of 10</span>
+        </div>
+        <div class="progress-label-row">
+          <span class="progress-label">Module Progress</span>
+          <span class="progress-pct" id="modProgressPct">50%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="modProgressFill" style="width:50%"></div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           PART 1 — STORY / LEARNING
+      ══════════════════════════════════ -->
+      <div id="part1Section">
+
+        <!-- Character card -->
+        <div class="dash-card character-card">
+          <div class="character-avatar" id="charAvatar">XX</div>
+          <div>
+            <div class="character-name" id="charName">Character Name</div>
+            <div class="character-role" id="charRole">Role</div>
+          </div>
+        </div>
+
+        <!-- Optional: simulated email/SMS -->
+        <div class="scenario-email" id="scenarioEmail" style="display:none">
+          <div class="scenario-email-header">
+            <div class="email-field"><span class="email-label">From:</span><span id="emailFrom"></span></div>
+            <div class="email-field"><span class="email-label">Subject:</span><span id="emailSubject"></span></div>
+          </div>
+          <div class="scenario-email-body" id="emailBody"></div>
+        </div>
+
+        <!-- Scenario narrative -->
+        <div class="dash-card scenario-card">
+          <span class="scenario-tag">Scenario</span>
+          <h2 class="scenario-title" id="scenarioTitle"></h2>
+          <div id="scenarioBody"></div>
+        </div>
+
+        <!-- Key lesson -->
+        <div class="key-lesson-card">
+          <div class="key-lesson-icon"><i class="fi fi-tr-lightbulb-on"></i></div>
+          <div>
+            <div class="key-lesson-heading">Key Lesson</div>
+            <p id="keyLessonText"></p>
+          </div>
+        </div>
+
+        <!-- What to do list -->
+        <div class="dash-card action-steps-card">
+          <h3 id="actionStepsHeading">What you should do:</h3>
+          <ol class="action-steps-list" id="actionStepsList"></ol>
+        </div>
+
+        <!-- Congratulations (final module only) -->
+        <div class="congrats-card" id="congratsCard" style="display:none">
+          <div class="key-lesson-icon"><i class="fi fi-tr-trophy-star"></i></div>
+          <div>
+            <div class="key-lesson-heading" style="color:#085041">Congratulations</div>
+            <p id="congratsText"></p>
+          </div>
+        </div>
+
+        <!-- Continue to quiz -->
+        <button class="btn-primary module-continue-btn" id="continueToQuizBtn">
+          Continue to quiz &rarr;
+        </button>
+
+      </div>
+
+      <!-- ══════════════════════════════════
+           PART 2 — MCQ QUIZ
+      ══════════════════════════════════ -->
+      <div id="part2Section" style="display:none">
+
+        <!-- Quiz intro -->
+        <div id="quizIntroCard" class="dash-card quiz-intro-card">
+          <div class="quiz-intro-icon"><i class="fi fi-tr-document-signed"></i></div>
+          <h2 class="quiz-intro-title" id="quizIntroTitle">Module Quiz</h2>
+          <p class="quiz-intro-sub">Answer 5 questions. Score 70% or above (4 out of 5) to unlock the next module.</p>
+          <div class="quiz-rules-grid">
+            <div class="quiz-rule-item"><i class="fi fi-tr-interrogation"></i><div><div class="quiz-rule-title">5 questions</div><div class="quiz-rule-sub">From this module</div></div></div>
+            <div class="quiz-rule-item"><i class="fi fi-tr-target"></i><div><div class="quiz-rule-title">70% to pass</div><div class="quiz-rule-sub">4 of 5 correct</div></div></div>
+            <div class="quiz-rule-item"><i class="fi fi-tr-shuffle"></i><div><div class="quiz-rule-title">Randomised</div><div class="quiz-rule-sub">Different each time</div></div></div>
+            <div class="quiz-rule-item"><i class="fi fi-tr-refresh"></i><div><div class="quiz-rule-title">Unlimited retries</div><div class="quiz-rule-sub">Review and try again</div></div></div>
+          </div>
+          <button class="btn-primary quiz-start-btn" id="startQuizBtn">Start quiz</button>
+        </div>
+
+        <!-- Active question -->
+        <div id="activeQuestion" style="display:none">
+          <div class="dash-card quiz-progress-card">
+            <div class="quiz-progress-top">
+              <span class="quiz-q-label" id="qLabel">Question 1 of 5</span>
+              <span class="quiz-topic-tag" id="qTopic">Topic</span>
+            </div>
+            <div class="progress-track" style="margin-top:10px">
+              <div class="progress-fill" id="quizProgressFill" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="dash-card quiz-question-card">
+            <p class="quiz-question-text" id="questionText"></p>
+            <div class="quiz-options" id="quizOptions"></div>
+            <button class="btn-primary quiz-submit-btn" id="submitBtn" disabled>Submit answer</button>
+          </div>
+        </div>
+
+        <!-- Per-question feedback -->
+        <div id="questionFeedback" style="display:none">
+          <div class="quiz-feedback-banner" id="feedbackBanner">
+            <i id="feedbackIcon" class="fi fi-tr-check"></i>
+            <span id="feedbackResult">Correct!</span>
+          </div>
+          <div class="dash-card quiz-feedback-card">
+            <p class="quiz-feedback-question" id="feedbackQuestion"></p>
+            <div class="quiz-options" id="feedbackOptions"></div>
+            <div class="quiz-explanation-box">
+              <div class="explanation-label"><i class="fi fi-tr-lightbulb-on"></i><span>Explanation</span></div>
+              <p id="explanationText"></p>
+            </div>
+            <button class="btn-primary quiz-next-btn" id="nextBtn" style="margin-top:1rem">Next question</button>
+          </div>
+        </div>
+
+        <!-- Final result -->
+        <div id="quizResult" style="display:none">
+          <div class="results-hero" id="resultHero">
+            <div class="results-hero-icon"><i id="resultIcon" class="fi fi-tr-trophy-star"></i></div>
+            <h2 class="results-headline" id="resultHeadline">Module passed!</h2>
+            <div class="results-score" id="resultScore">80%</div>
+            <div class="results-score-sub" id="resultSub">4 of 5 correct</div>
+          </div>
+          <div class="results-actions" id="resultActions" style="margin-top:1rem"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Firebase SDK (compat build — plain script tags, no bundler) -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
