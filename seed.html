@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn-uicons.flaticon.com https://www.gstatic.com; style-src 'self' https://fonts.googleapis.com https://cdn-uicons.flaticon.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn-uicons.flaticon.com; img-src 'self' data:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com;">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seed Demo Data — e-Safe | Cissy Technologies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-thin-rounded/css/uicons-thin-rounded.css">
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-thin-straight/css/uicons-thin-straight.css">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Styles scoped to this one-off admin utility page only —
+       nothing here touches style.css. */
+    .seed-warning {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: #FEF2F2; border: 1.5px solid #DC2626; border-radius: var(--radius);
+      padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+    }
+    .seed-warning i { font-size: 20px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .seed-warning-title { font-size: 14px; font-weight: 700; color: #991B1B; margin-bottom: 4px; }
+    .seed-warning-body { font-size: 13px; color: #991B1B; line-height: 1.6; }
+
+    .seed-password-box {
+      background: var(--gray-bg); border: 1px solid var(--gray-border); border-radius: var(--radius-sm);
+      padding: 12px 14px; font-size: 13px; color: var(--text); margin: 1rem 0; line-height: 1.6;
+    }
+    .seed-password-box code {
+      background: var(--white); border: 1px solid var(--gray-border); border-radius: 4px;
+      padding: 2px 6px; font-family: monospace; font-size: 13px; color: var(--navy);
+    }
+
+    .seed-status-line { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-2); margin: 1.25rem 0; }
+    .seed-spinner {
+      width: 16px; height: 16px; border: 2px solid var(--gray-border); border-top-color: var(--navy);
+      border-radius: 50%; animation: seed-spin 0.7s linear infinite; flex-shrink: 0;
+    }
+    @keyframes seed-spin { to { transform: rotate(360deg); } }
+
+    .seed-employee-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--gray-border); font-size: 13px;
+    }
+    .seed-employee-row:last-child { border-bottom: none; }
+    .seed-employee-name { font-weight: 600; color: var(--navy); }
+    .seed-employee-meta { color: var(--text-3); font-size: 12px; margin-top: 2px; }
+    .seed-employee-status { text-align: right; flex-shrink: 0; }
+  </style>
+</head>
+<body class="register-body">
+
+  <div class="register-wrap" style="max-width: 640px;">
+    <div class="register-card">
+
+      <div class="seed-warning">
+        <i class="fi fi-tr-triangle-warning"></i>
+        <div>
+          <div class="seed-warning-title">ADMIN USE ONLY — DELETE AFTER SEEDING</div>
+          <div class="seed-warning-body">
+            This page creates 8 real Firebase Authentication accounts and Firestore employee
+            records so the admin dashboard has demo data. It signs the browser out at the end,
+            so run it before your own admin session, not during a live demo. Delete both
+            seed.html and seed.js from the repository once seeding is done — they should never
+            stay on a production site.
+          </div>
+        </div>
+      </div>
+
+      <h1 class="register-title">Seed Demo Data</h1>
+      <p class="register-sub">Populates 8 fictional Cissy Technologies employees into Firestore for the admin dashboard handover demo.</p>
+
+      <div class="seed-password-box">
+        Every seeded account shares the password <code id="seedPasswordDisplay">…</code> —
+        use it with any email listed below to sign in and demo the employee-side pages.
+      </div>
+
+      <div class="seed-status-line" id="seedStatusLine">
+        <div class="seed-spinner"></div>
+        <span id="seedStatusText">Starting…</span>
+      </div>
+
+      <div id="seedResults" style="display:none"></div>
+
+      <button class="btn-outline" id="reseedBtn" style="display:none; width:100%; justify-content:center; margin-top:1rem;">
+        Run seeding again
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Firebase SDK (compat build — plain script tags, no bundler) -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="seed.js"></script>
+</body>
+</html>
