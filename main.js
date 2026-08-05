@@ -65,6 +65,49 @@ function isValidName(name) {
 
 
 // ═══════════════════════════════════════════════
+// AUTH GUARD — redirect unauthenticated / unauthorised
+// visitors away from protected pages before they render
+// ═══════════════════════════════════════════════
+(function authGuard() {
+  const bodyClass = document.body.className;
+  const isProtectedPage = /\b(dashboard-body|module-body|quiz-body|results-body|cert-page-body)\b/.test(bodyClass);
+  if (!isProtectedPage) return;
+
+  const user = safeGet('esafe_user');
+  if (!user) {
+    window.location.replace('register.html');
+    return;
+  }
+
+  if (bodyClass.includes('cert-page-body') && localStorage.getItem('esafe_quiz_passed') !== 'true') {
+    window.location.replace('dashboard.html');
+    return;
+  }
+
+  if (bodyClass.includes('quiz-body')) {
+    const completed = safeGet('esafe_completed_modules') || [];
+    if (completed.length < 5) {
+      window.location.replace('dashboard.html');
+      return;
+    }
+  }
+})();
+
+// ── Sign out ──
+function signOut() {
+  localStorage.removeItem('esafe_user');
+  window.location.href = 'register.html';
+}
+
+document.querySelectorAll('#signOutBtn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    signOut();
+  });
+});
+
+
+// ═══════════════════════════════════════════════
 // REGISTER FORM
 // ═══════════════════════════════════════════════
 const registerForm = document.getElementById('registerForm');
@@ -347,9 +390,12 @@ const QUIZ_MODULE_NAMES = {
 // ═══════════════════════════════════════════════
 // QUIZ LOGIC
 // ═══════════════════════════════════════════════
+// Guard on #quizIntro (unique to the final quiz page) rather than #startQuizBtn,
+// since module.html's per-module quiz start button shares that same id.
+const quizIntroEl = document.getElementById('quizIntro');
 const startQuizBtn = document.getElementById('startQuizBtn');
 
-if (startQuizBtn) {
+if (quizIntroEl && startQuizBtn) {
   // User avatar
   const quizUserRaw = localStorage.getItem('esafe_user');
   const quizUser = quizUserRaw ? JSON.parse(quizUserRaw) : { fullName: "Guest" };
@@ -937,7 +983,7 @@ if (moduleTitleEl2) {
   const showQuiz = mParams.get('quiz') === '1';
 
   const mod = MODULES_DATA.find(m => m.id === mId);
-  if (!mod) { window.location.href = 'dashboard.html'; return; }
+  if (!mod) { window.location.href = 'dashboard.html'; }
 
   document.getElementById('moduleBadge').textContent = mod.badge;
 
