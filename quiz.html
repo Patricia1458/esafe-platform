@@ -6,15 +6,16 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz Results — e-Safe | Cissy Technologies</title>
+  <title>Final Quiz — e-Safe | Cissy Technologies</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-thin-rounded/css/uicons-thin-rounded.css">
   <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-thin-straight/css/uicons-thin-straight.css">
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="results-body">
+<body class="quiz-body">
 
+  <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">
@@ -39,43 +40,108 @@
     </div>
   </nav>
 
-  <main class="results-main">
-    <div class="results-container">
+  <main class="quiz-main">
+    <div class="quiz-container">
 
-      <!-- SCORE HERO -->
-      <div class="results-hero" id="resultsHero">
-        <div class="results-hero-icon" id="resultsHeroIcon">
-          <i class="fi fi-tr-trophy-star" id="resultsIcon"></i>
+      <!-- ── INTRO SCREEN ── -->
+      <div id="quizIntro">
+        <div class="dash-card quiz-intro-card">
+          <div class="quiz-intro-icon">
+            <i class="fi fi-tr-document-signed"></i>
+          </div>
+          <h1 class="quiz-intro-title">Final Quiz</h1>
+          <p class="quiz-intro-sub" id="quizIntroSub">You have completed all 10 modules. Time to test your knowledge.</p>
+
+          <div class="quiz-rules-grid">
+            <div class="quiz-rule-item">
+              <i class="fi fi-tr-interrogation"></i>
+              <div>
+                <div class="quiz-rule-title">100 questions</div>
+                <div class="quiz-rule-sub">Drawn from all 10 modules</div>
+              </div>
+            </div>
+            <div class="quiz-rule-item">
+              <i class="fi fi-tr-target"></i>
+              <div>
+                <div class="quiz-rule-title">70% to pass</div>
+                <div class="quiz-rule-sub">70 or more correct answers</div>
+              </div>
+            </div>
+            <div class="quiz-rule-item">
+              <i class="fi fi-tr-shuffle"></i>
+              <div>
+                <div class="quiz-rule-title">Randomised order</div>
+                <div class="quiz-rule-sub">Different each attempt</div>
+              </div>
+            </div>
+            <div class="quiz-rule-item">
+              <i class="fi fi-tr-refresh"></i>
+              <div>
+                <div class="quiz-rule-title">Unlimited retries</div>
+                <div class="quiz-rule-sub">Review modules and try again</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary quiz-start-btn" id="startQuizBtn">
+            Start quiz
+          </button>
         </div>
-        <h1 class="results-headline" id="resultsHeadline">You passed!</h1>
-        <div class="results-score" id="resultsScore">0%</div>
-        <div class="results-score-sub" id="resultsScoreSub">0 of 100 correct</div>
       </div>
 
-      <!-- SCORE BREAKDOWN BY THEME -->
-      <div class="dash-card results-breakdown">
-        <h2 class="results-breakdown-title">Score by module</h2>
-        <div id="themeBreakdown"><!-- injected by JS --></div>
-      </div>
+      <!-- ── QUESTION SCREEN ── -->
+      <div id="quizQuestion" style="display:none">
 
-      <!-- WEAK TOPICS (fail only) -->
-      <div class="dash-card results-weak" id="weakTopicsCard" style="display:none">
-        <div class="weak-header">
-          <i class="fi fi-tr-triangle-warning"></i>
-          <h3>Review these topics first</h3>
+        <!-- Progress header -->
+        <div class="dash-card quiz-progress-card">
+          <div class="quiz-progress-top">
+            <span class="quiz-q-label" id="qLabel">Question 1 of 100</span>
+            <span class="quiz-topic-tag" id="qTopic">Topic</span>
+          </div>
+          <div class="progress-track" style="margin-top:10px">
+            <div class="progress-fill" id="quizProgressFill" style="width:0%"></div>
+          </div>
         </div>
-        <div id="weakTopicsList"><!-- injected by JS --></div>
+
+        <!-- Question card -->
+        <div class="dash-card quiz-question-card">
+          <p class="quiz-question-text" id="questionText">Question text here</p>
+
+          <div class="quiz-options" id="quizOptions">
+            <!-- options injected by JS -->
+          </div>
+
+          <button class="btn-primary quiz-submit-btn" id="submitAnswerBtn" disabled>
+            Submit answer
+          </button>
+        </div>
+
       </div>
 
-      <!-- ACTION BUTTONS -->
-      <div class="results-actions" id="resultsActions">
-        <!-- injected by JS depending on pass/fail -->
-      </div>
+      <!-- ── FEEDBACK SCREEN ── -->
+      <div id="quizFeedback" style="display:none">
+        <div class="quiz-feedback-banner" id="feedbackBanner">
+          <i id="feedbackIcon" class="fi fi-tr-check"></i>
+          <span id="feedbackResult">Correct!</span>
+        </div>
 
-      <!-- ENCOURAGEMENT (fail only) -->
-      <p class="results-encouragement" id="resultsEncouragement" style="display:none">
-        You can retake the quiz as many times as you need. Review the topics above and you will get there.
-      </p>
+        <div class="dash-card quiz-feedback-card">
+          <p class="quiz-feedback-question" id="feedbackQuestion"></p>
+          <div class="quiz-options" id="feedbackOptions"></div>
+
+          <div class="quiz-explanation-box" id="explanationBox">
+            <div class="explanation-label">
+              <i class="fi fi-tr-lightbulb-on"></i>
+              <span id="explanationHeading">Why this is correct</span>
+            </div>
+            <p id="explanationText"></p>
+          </div>
+
+          <button class="btn-primary quiz-next-btn" id="nextQuestionBtn">
+            Next question
+          </button>
+        </div>
+      </div>
 
     </div>
   </main>
