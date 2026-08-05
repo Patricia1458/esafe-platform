@@ -1441,3 +1441,66 @@ select.input-field {
 /* 5-module grid — bigger cards */
 .modules-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 .module-thumb i { font-size: 28px; }
+
+/* ═══════════════════════════════════════════════
+   PROFILE + ADMIN PAGES
+═══════════════════════════════════════════════ */
+.profile-body { background: var(--gray-bg); }
+.admin-body { background: var(--gray-bg); }
+
+.stats-row-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
+@media (max-width: 768px) { .stats-row-4 { grid-template-columns: repeat(2, 1fr); } }
+
+.admin-table-wrap { overflow-x: auto; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.admin-table th, .admin-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--gray-border); white-space: nowrap; }
+.admin-table th { font-size: 12px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .04em; }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table td { color: var(--text); }
+
+.admin-badge { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 12px; }
+.admin-badge.good { background: #E6FAF5; color: #085041; }
+.admin-badge.pending { background: var(--navy-light); color: var(--navy); }
+.admin-badge.none { background: var(--gray-bg); color: var(--text-3); border: 1px solid var(--gray-border); }
+
+/* ═══════════════════════════════════════════════
+   FORM BANNER (sign-in redirect messages, etc.)
+═══════════════════════════════════════════════ */
+.form-banner {
+  background: var(--gray-bg); border: 1px solid var(--gray-border); border-radius: var(--radius-sm);
+  padding: 12px 14px; font-size: 13px; color: var(--text); line-height: 1.5;
+  margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 10px;
+}
+.form-banner i { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+.form-banner.error { background: #FEF2F2; border-color: #DC2626; color: #991B1B; }
+.form-banner.error i { color: #DC2626; }
+.admin-note { text-align: center; font-size: 12px; color: var(--text-3); margin-top: .75rem; }
+
+/* ═══════════════════════════════════════════════
+   MODULE CONGRATULATIONS CARD (final module)
+═══════════════════════════════════════════════ */
+.congrats-card {
+  background: #E6FAF5; border: 1px solid #1D9E75; border-radius: var(--radius);
+  padding: 1.5rem; margin-bottom: 1rem; display: flex; gap: 14px; align-items: flex-start;
+}
+.congrats-card .key-lesson-icon { background: white; border-color: #1D9E75; }
+.congrats-card .key-lesson-icon i { color: #1D9E75; }
+.congrats-card p { font-size: 13px; color: #085041; line-height: 1.6; }
+
+/* ═══════════════════════════════════════════════
+   RESOURCES PAGE
+═══════════════════════════════════════════════ */
+.resources-body { background: var(--gray-bg); }
+
+.glossary-list { display: flex; flex-direction: column; gap: 14px; }
+.glossary-term { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+.glossary-def { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+@media print {
+  .resources-body .navbar,
+  .resources-body #glossarySection,
+  .resources-body #incidentSection,
+  .resources-body #downloadSection { display: none !important; }
+  .resources-body { background: white; }
+  .resources-body .dashboard-main { padding: 0; }
+}
