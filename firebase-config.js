@@ -5,4 +5,5 @@ const firebaseConfig = {
   storageBucket: "esafe-cissy.firebasestorage.app",
   messagingSenderId: "794580293560",
   appId: "1:794580293560:web:e3e952d526bd811efde14d"
+  databaseURL: "https://esafe-cissy-default-rtdb.firebaseio.com"
 };
