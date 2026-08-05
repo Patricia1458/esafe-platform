@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn-uicons.flaticon.com https://www.gstatic.com; style-src 'self' https://fonts.googleapis.com https://cdn-uicons.flaticon.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn-uicons.flaticon.com; img-src 'self' data:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn-uicons.flaticon.com https://www.gstatic.com https://cdn.firebase.com; style-src 'self' https://fonts.googleapis.com https://cdn-uicons.flaticon.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn-uicons.flaticon.com; img-src 'self' data:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com https://www.gstatic.com;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,6 +31,7 @@
       </a>
       <div class="nav-links">
         <a href="dashboard.html" class="nav-link">My Progress</a>
+        <a href="resources.html" class="nav-link">Resources</a>
         <a href="profile.html" class="nav-link">My Profile</a>
         <a href="#" class="nav-link" id="signOutBtn">Sign out</a>
         <div class="user-avatar" id="userAvatar">JS</div>
@@ -55,7 +56,7 @@
 
         <div class="stats-row">
           <div class="stat-card">
-            <div class="stat-card-num" id="profileModulesCompleted">0/5</div>
+            <div class="stat-card-num" id="profileModulesCompleted">0/10</div>
             <div class="stat-card-label">Modules Completed</div>
           </div>
           <div class="stat-card">
@@ -72,6 +73,11 @@
 
         <div id="profileCertAction"></div>
 
+      </div>
+
+      <div class="dash-card" id="profileModulesCard">
+        <h3 style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:1rem">Completed Modules</h3>
+        <ul class="action-steps-list" id="profileModulesList"></ul>
       </div>
 
     </div>
