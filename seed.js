@@ -8,51 +8,64 @@
 const SEED_PASSWORD = 'CissySeed#2026';
 document.getElementById('seedPasswordDisplay').textContent = SEED_PASSWORD;
 
+const ALL_10 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const HALFWAY = [1, 2, 3, 4, 5];
+
 const SEED_EMPLOYEES = [
-  // 2 fully complete + certified
+  // 3 completed all 10 modules and passed the final quiz — certified
   {
     fullName: 'Grace Adeyemi', email: 'grace.adeyemi@cissytechnologies.com', department: 'IT',
     registeredAt: '2026-06-02T09:15:00.000Z',
-    completedModules: [1, 2, 3, 4, 5], finalQuizScore: 84, finalQuizPassed: true, certificateIssued: true
+    completedModules: ALL_10, finalQuizScore: 88, finalQuizPassed: true, certificateIssued: true
   },
   {
     fullName: 'Michael Owusu', email: 'michael.owusu@cissytechnologies.com', department: 'Finance',
-    registeredAt: '2026-06-09T14:40:00.000Z',
-    completedModules: [1, 2, 3, 4, 5], finalQuizScore: 92, finalQuizPassed: true, certificateIssued: true
-  },
-  // 2 all modules done, final quiz not yet taken
-  {
-    fullName: 'Linda Boateng', email: 'linda.boateng@cissytechnologies.com', department: 'Operations',
-    registeredAt: '2026-06-16T10:05:00.000Z',
-    completedModules: [1, 2, 3, 4, 5], finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
+    registeredAt: '2026-06-05T14:40:00.000Z',
+    completedModules: ALL_10, finalQuizScore: 92, finalQuizPassed: true, certificateIssued: true
   },
   {
-    fullName: 'Samuel Appiah', email: 'samuel.appiah@cissytechnologies.com', department: 'HR',
-    registeredAt: '2026-06-23T11:30:00.000Z',
-    completedModules: [1, 2, 3, 4, 5], finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
+    fullName: 'Esther Boakye', email: 'esther.boakye@cissytechnologies.com', department: 'Operations',
+    registeredAt: '2026-06-09T11:20:00.000Z',
+    completedModules: ALL_10, finalQuizScore: 76, finalQuizPassed: true, certificateIssued: true
   },
-  // 2 halfway through, around module 3
+  // 2 completed all modules but have not taken the final quiz
   {
-    fullName: 'Patricia Mensah', email: 'patricia.mensah@cissytechnologies.com', department: 'Sales',
-    registeredAt: '2026-07-01T08:50:00.000Z',
-    completedModules: [1, 2, 3], finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
+    fullName: 'Linda Boateng', email: 'linda.boateng@cissytechnologies.com', department: 'HR',
+    registeredAt: '2026-06-12T10:05:00.000Z',
+    completedModules: ALL_10, finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
   },
   {
-    fullName: 'Daniel Osei', email: 'daniel.osei@cissytechnologies.com', department: 'Legal',
-    registeredAt: '2026-07-07T16:20:00.000Z',
-    completedModules: [1, 2, 3], finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
+    fullName: 'Samuel Appiah', email: 'samuel.appiah@cissytechnologies.com', department: 'Sales',
+    registeredAt: '2026-06-16T13:45:00.000Z',
+    completedModules: ALL_10, finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
   },
-  // 1 just registered, nothing started
+  // 3 halfway through, around module 5
   {
-    fullName: 'Ruth Asante', email: 'ruth.asante@cissytechnologies.com', department: 'IT',
-    registeredAt: '2026-07-14T09:00:00.000Z',
+    fullName: 'Patricia Mensah', email: 'patricia.mensah@cissytechnologies.com', department: 'Legal',
+    registeredAt: '2026-06-20T08:50:00.000Z',
+    completedModules: HALFWAY, finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
+  },
+  {
+    fullName: 'Daniel Osei', email: 'daniel.osei@cissytechnologies.com', department: 'IT',
+    registeredAt: '2026-06-24T15:10:00.000Z',
+    completedModules: HALFWAY, finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
+  },
+  {
+    fullName: 'Victor Amankwah', email: 'victor.amankwah@cissytechnologies.com', department: 'Finance',
+    registeredAt: '2026-06-28T09:30:00.000Z',
+    completedModules: HALFWAY, finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
+  },
+  // 1 just registered, has not started
+  {
+    fullName: 'Ruth Asante', email: 'ruth.asante@cissytechnologies.com', department: 'Operations',
+    registeredAt: '2026-07-05T09:00:00.000Z',
     completedModules: [], finalQuizScore: null, finalQuizPassed: false, certificateIssued: false
   },
   // 1 failed the final quiz
   {
-    fullName: 'Kwabena Darko', email: 'kwabena.darko@cissytechnologies.com', department: 'Finance',
-    registeredAt: '2026-06-28T13:10:00.000Z',
-    completedModules: [1, 2, 3, 4, 5], finalQuizScore: 58, finalQuizPassed: false, certificateIssued: false
+    fullName: 'Kwabena Darko', email: 'kwabena.darko@cissytechnologies.com', department: 'HR',
+    registeredAt: '2026-07-10T13:10:00.000Z',
+    completedModules: ALL_10, finalQuizScore: 58, finalQuizPassed: false, certificateIssued: false
   }
 ];
 
@@ -61,16 +74,16 @@ function describeStatus(emp) {
   if (doneCount === 0) {
     return { label: 'Not started', cls: 'none' };
   }
-  if (doneCount < 5) {
-    return { label: `${doneCount} of 5 modules`, cls: 'pending' };
+  if (doneCount < 10) {
+    return { label: `${doneCount} of 10 modules`, cls: 'pending' };
   }
   if (typeof emp.finalQuizScore !== 'number') {
-    return { label: 'All 5 modules · Final quiz not taken', cls: 'pending' };
+    return { label: 'All 10 modules · Final quiz not taken', cls: 'pending' };
   }
   if (emp.finalQuizPassed) {
-    return { label: `All 5 modules · Passed final quiz (${emp.finalQuizScore}%) · Certified`, cls: 'good' };
+    return { label: `All 10 modules · Passed final quiz (${emp.finalQuizScore}%) · Certified`, cls: 'good' };
   }
-  return { label: `All 5 modules · Failed final quiz (${emp.finalQuizScore}%)`, cls: 'none' };
+  return { label: `All 10 modules · Failed final quiz (${emp.finalQuizScore}%)`, cls: 'none' };
 }
 
 async function seedEmployee(emp) {
@@ -185,5 +198,5 @@ async function runSeed() {
 document.getElementById('reseedBtn').addEventListener('click', runSeed);
 
 // Runs automatically on page load, as requested — re-opening this
-// page simply re-seeds the same 8 accounts (safe, see seedEmployee above).
+// page simply re-seeds the same 10 accounts (safe, see seedEmployee above).
 runSeed();
