@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn-uicons.flaticon.com; style-src 'self' https://fonts.googleapis.com https://cdn-uicons.flaticon.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn-uicons.flaticon.com; img-src 'self' data:; connect-src 'self';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn-uicons.flaticon.com https://www.gstatic.com; style-src 'self' https://fonts.googleapis.com https://cdn-uicons.flaticon.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn-uicons.flaticon.com; img-src 'self' data:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -67,6 +67,18 @@
         />
         <span class="input-error" id="workEmailError">Please enter a valid work email</span>
 
+        <label class="input-label" for="registerPassword">Password</label>
+        <input
+          type="password"
+          id="registerPassword"
+          name="registerPassword"
+          class="input-field"
+          placeholder="At least 8 characters"
+          autocomplete="new-password"
+          required
+        />
+        <span class="input-error" id="registerPasswordError">Password must be at least 8 characters</span>
+
         <label class="input-label" for="department">Department</label>
         <select id="department" name="department" class="input-field">
           <option value="">Select your department</option>
@@ -82,12 +94,14 @@
           Your information is secure and will only be used for training purposes and certificate issuance. We respect your privacy.
         </div>
 
+        <span class="input-error" id="registerFormError"></span>
+
         <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:1.25rem">
           Begin Training
         </button>
 
         <p class="signin-link">
-          Already have an account? <a href="dashboard.html"><strong>Sign In</strong></a>
+          Already have an account? <a href="signin.html"><strong>Sign In</strong></a>
         </p>
 
       </form>
@@ -95,6 +109,11 @@
     </div>
   </div>
 
+  <!-- Firebase SDK (compat build — plain script tags, no bundler) -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
