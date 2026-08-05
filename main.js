@@ -937,7 +937,7 @@ if (moduleTitleEl2) {
   const showQuiz = mParams.get('quiz') === '1';
 
   const mod = MODULES_DATA.find(m => m.id === mId);
-  if (!mod) { window.location.href = 'dashboard.html'; }
+  if (!mod) { window.location.href = 'dashboard.html'; return; }
 
   document.getElementById('moduleBadge').textContent = mod.badge;
 
